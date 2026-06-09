@@ -1,0 +1,12 @@
+{
+  "name": "The Iris Foundation #14",
+  "description": "Genesis Foundation Chair #14 of The Iris Foundation (IRIS-FOUNDATION). One of 15 functionally identical institutional credit-line tokens governing fee rights and veto authority over Iris Protocol.",
+  "image": "ipfs://placeholder/14-chair.png",
+  "external_url": "https://docs.iris.exchange/foundation-lore/chair-14",
+  "attributes": [
+    { "trait_type": "Collection", "value": "IRIS-FOUNDATION" },
+    { "trait_type": "Token ID", "value": 14 },
+    { "trait_type": "Max Supply", "value": 15 },
+    { "trait_type": "Foundation Fee BPS", "value": 500 }
+  ]
+}
