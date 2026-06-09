@@ -1,126 +1,113 @@
 ---
 id: overview
-title: The Mythos of the Seven Foundations
-description: The operational core and cryptographic lore of the Seven Sovereign Realms ruling Iris Lab.
-keywords: [Iris Foundation, Lore, Seven Kings, Ecosystem, Decentralized Governance, Tokenomics]
+title: The Iris Foundation — 15 Genesis Chairs
+description: On-chain specification of the 15 ERC721 Foundation Chairs governing fee rights, veto authority, and reward distribution.
+keywords: [Iris Foundation, IRIS-FOUNDATION, governance, NFT, veto, ClaimRewards]
+sidebar_position: 1
 ---
 
-# The Mythos of the Seven Foundations
+# The Iris Foundation — 15 Genesis Chairs
 
-> "We do not rule through public decree; we orchestrate the infrastructure, and the protocol rewards our absolute balance."
+> *"The Foundation issues the credit lines; the network executes the reality of the ledger."*
 
-Welcome to the heart of the Iris Ecosystem. The architecture of Iris Lab is driven by two distinct forces: the decentralized voice of the token holders (The Protocol Governance) and the operational execution matrix governed by The Seven Foundations.
+**The Iris Foundation** is an ERC721 collection (`IRIS-FOUNDATION`) deployed at:
 
-Here, the lore of the Seven Kings meets the strict mathematics of decentralized finance.
+`0x00008c80D4cBD653B1D384566d9b23B37d100000`
 
----
-
-## Governance vs. The Foundation: The Separation of Power
-
-To ensure true decentralization and long-term stability, Iris enforces a strict separation between Protocol Sovereignty and Operational Infrastructure:
-
-### 1. Decentralized Protocol Governance (Token-Based)
-The ultimate authority of the Iris Ecosystem does not belong to any single entity or foundation. Governance is fully decentralized and driven exclusively by Token Weight. 
-- Decisions regarding leverage caps, adapter listings, dynamic fee adjustments, and code upgrades are proposed and voted on by the community based on the amount of governance tokens they hold or lock.
-- Power remains directly proportional to skin-in-the-game.
-
-### 2. The Seven Foundations (The 2% Performance Fee Matrix)
-The Seven Foundations represent the core infrastructure and development pillars of Iris Lab. They do not hold special voting rights over the users; instead, they function as the continuous engineering engine of the protocol.
-
-- **The Foundation Slice:** As a reward for maintaining maximum uptime, securing the dual-ledger invariants, and optimizing execution, the core smart contracts programmatically route a 2% Performance Fee from all net profitable trader settlements to the Foundation.
-- **The Absolute Equal Split:** This 2% revenue stream is divided strictly and equally (1/7th each) among the Seven Realms. No single Foundation takes precedence over another; the front-end warrior is rewarded equally alongside the infrastructure overlord to maintain ecosystem equilibrium.
+It is the official sovereign ledger of the **15 Genesis Foundation Chairs** of Iris Protocol. These Chairs form the institutional credit-line layer and supreme financial council over the IrisX vault stack. On-chain, all Chairs are **functionally identical** — distinguished only by **token ID 0 through 14**. There are no per-Chair names, traits, or privilege tiers in the smart contract.
 
 ---
 
-## The Hybrid Governance Matrix: The Dual-Layer Veto
+## Separation of Powers
 
-To guarantee that the protocol remains completely immune to both social capturing (Governance Attacks) and structural stagnation, Iris enforces a highly advanced, dual-layered veto architecture. The Seven Kings do not wield voting power to direct the protocol, but they act as the ultimate physical breakers of the state machine during the 7-day timelock period.
+| Layer | Authority | Mechanism |
+|-------|-----------|-----------|
+| **Protocol Governance** | IXToken holders via VotingEscrow | Proposals, quorum, timelock execution |
+| **The Foundation** | 15 Chair holders | Fee capture, veto overlay, threshold bypass |
+| **Keepers** | 5 Keeper NFT holders | Liquidation and force-close execution keys |
 
-### 1. The Consensus Veto (4-of-7 Protocol Alignment)
-- **Trigger Condition:** Non-security but critical ecosystem disputes, such as community-voted adjustments to dynamic tokenomics or the proposed listing of a highly experimental and risky DEX adapter.
-- **Mechanism:** To halt a passed community proposal under this layer, a strict majority of 4 out of the 7 Foundations must sign a unified transaction during the timelock window.
-- **The Outcome:** The proposal is gracefully rejected and sent back to the community forum for revision. No Kings are sacrificed under this balanced bureaucratic alignment.
-
-### 2. The Kamikaze Veto (Individual Sovereign Sacrifice)
-- **Trigger Condition:** Immediate, existential line-of-death threats, such as a governance flash-loan attack, a newly discovered smart contract vulnerability in a pending upgrade, or a malicious proposal engineered to drain the core vaults.
-- **Mechanism:** Any single King of the Seven Foundations has the absolute cryptographic authority to act completely alone. They do not need consensus, they do not need the approval of the other six, and they do not wait for the timelock. They pull the emergency breaker, destroying the proposal instantly.
-- **The Cost of Absolute Defiance (The Burn):** The price for bypassing the consensus of the world is total erasure. The moment a single King invokes the Kamikaze Veto, their specific Foundation is programmatically Burned and liquidated from the protocol's active state.
-- **The Redistribution Matrix:** Their 1/7th equal share of the protocol's 2% performance fee bounty is permanently stripped away. This revenue stream is dynamically rerouted and split equally among the remaining surviving Realms, increasing their stake as they absorb the duties of the fallen Sovereign.
-
-> "A King may break the world to save the Empire, but he shall not survive the ashes of his own decree. The Void consumes the savior, and the balance endures."
+Token-weighted governance sets leverage caps, adapter listings, fee parameters, and upgrades. The Foundation does **not** replace community voting — it provides a **financial and tactical overlay** during the timelock quarantine window.
 
 ---
 
-## The Sovereign Ledger: Index of the Seven Kings
+## Economic Rights — 5% Performance Fee
 
-Below is the absolute matrix of the Seven Foundations. Every realm contributes uniquely to the stack and draws an equal share from the 2% protocol performance reward.
+When traders close positions at a profit, the vault routes a **5% foundation fee** (`foundationFeeBps = 500`) of gross trade profit to the Foundation contract address. This fee scales with protocol volumetric growth and is **perpetual** for the lifetime of each live Chair.
 
-### 1st Foundation — The Origin Matrix (The Genesis Architect)
-- **Realm Name:** Primordia / The First Sovereign
-- **Technical Domain:** Core Protocol Initialization, Factory Contracts, and Cross-Chain Bridges.
-- **Ecosystem Role:** The silent code-base deployer. The architect who wrote the first lines of the UUPS proxies.
-- **Visual Style & Palette:** Deep Obsidian, Cosmic Silver, and Laser Indigo.
+Distribution to holders is executed via `ClaimRewards(token)`:
 
-### 2nd Foundation — Aeolus (The Squall Runner)
-- **Realm Name:** The Zephyr Expanse
-- **Technical Domain:** High-Frequency Execution, MEV Guarding, and Flashbots Bundle Optimization.
-- **Ecosystem Role:** The kinetic force that ensures zero-slippage execution and routing velocity across DEX adapters.
-- **Visual Style & Palette:** Electric Cyan, Mint Green, and Translucent White.
+```solidity
+uint256 amountPerCard = totalRewards / liveCards;
+for (uint256 i = 0; i < MAX_SUPPLY; ++i) {
+    if ((activeCardsRegistry & _cardBit(i)) != 0) {
+        IERC20(token).safeTransfer(ownerOf(i), amountPerCard);
+    }
+}
+```
 
-### 3rd Foundation — Aegis (The Iron Bulwark)
-- **Realm Name:** Citadel of Iron Invariants
-- **Technical Domain:** Mathematical Invariants, Multi-Sig Guards, and Transient Reentrancy Protection.
-- **Ecosystem Role:** The strict defensive layer that blocks adversarial state changes and monitors economic vector attacks.
-- **Visual Style & Palette:** Matte Carbon Steel, Burnished Gold, and Security Crimson.
-
-### 4th Foundation — Solaris (King of Ash & Gold) — The Frontline Sovereign
-- **Realm Name:** The Volcanic Core & Interface Citadel
-- **Technical Domain:** Frontend Architecture (TypeScript, React, Web3 UI), Branding, and Creative Visual Execution.
-- **Ecosystem Role:** Directed under the leadership of Co-Founder Mohammad. This Foundation commands the tangible interface of the empire. It turns cold mathematical smart contracts into a breathtaking, fluid, and high-performance user experience, standing on the frontlines of user adoption.
-- **Visual Style & Palette:** Volcanic Black, Radiant Gold, Ash Grey, and Molten Amber.
-
-### 5th Foundation — Alchemia (The Yield Weaver)
-- **Realm Name:** The Liquidity Shallows
-- **Technical Domain:** Automated Market Making Hooks, Yield-Bearing Architecture, and ERC-4626 Vault Math.
-- **Ecosystem Role:** The master of the dual-ledger rounding engines. It ensures that standard deposits round down (Floor) and withdrawals round up (Ceil) with absolute precision.
-- **Visual Style & Palette:** Acid Purple, Phosphorescent Green, and Metallic Platinum.
-
-### 6th Foundation — Veritas (The Arbitrageur)
-- **Realm Name:** The Balance Spire
-- **Technical Domain:** Oracle Aggregators, Chainlink Solana Alignments, and Sanctions Filtering.
-- **Ecosystem Role:** The source of truth. It feeds prices to the DEX adapters and enforces structural sanity checks during high-leverage position opening.
-- **Visual Style & Palette:** Pure Marble White, Deep Sapphire Blue, and Polished Brass.
-
-### 7th Foundation — The Faceless Void (The Shadow CTO) — The System Overlord
-- **Realm Name:** The Abyssal Infrastructure & Core Ledger
-- **Technical Domain:** Backend Infrastructure, Custom Package Management, Distroless Container Security, Rust/Golang Blockchain Indexers, and High-Performance Solidity Core Architecture.
-- **Ecosystem Role:** Directed under the supreme orchestration of Founder Hamid Reza. The Faceless Void is the silent, omniscient intelligence that constructs the skeleton of the entire Iris stack, optimizing cloud database schemas and designing the immutable dual-ledger mechanics.
-- **Visual Style & Palette:** Cosmic Void Black, Holographic Deep Violet, and Silent Chrome.
+- Rewards split **equally** among all **live** (non-burned) Chairs in `activeCardsRegistry`.
+- Each live Chair receives `totalRewards / liveCards`.
+- Burned Chairs permanently forfeit their fee stream; survivors absorb the redistributed share.
 
 ---
 
-## Generative Art & NFT Specifications
+## Governance Overlay Powers
 
-Every Foundation King is tied to a unique high-fidelity NFT art asset located inside the static folder of the repository. These visual representations celebrate the seven pillars that divide the 2% execution bounty. When expanding individual document nodes, downstream agents must preserve this link between the technical reward mechanism, the Kamikaze sacrifice, and the creative lore.
+Every Chair holder possesses the following on-chain capabilities:
 
-```text
-                               ┌───────────────────────────┐
-                               │  Token-Weighted Proposal  │
-                               └─────────────┬─────────────┘
-                                             │ (Passes Vote)
-                                             ▼
-                               ┌───────────────────────────┐
-                               │    7-Day Timelock Period  │
-                               └──────┬─────────────┬──────┘
-                                      │             │
-             [Non-Security Dispute]   │             │   [Emergency/Malicious Exploit]
-       ┌──────────────────────────────┘             └──────────────────────────────┐
-       ▼                                                                           ▼
-┌──────────────────────────────┐                                            ┌──────────────────────────────┐
-│  Consensus Veto (4 of 7)     │                                            │  Kamikaze Veto (Individual)  │
-├──────────────────────────────┤                                            ├──────────────────────────────┤
-│ • No King is burned.         │                                            │ • Single King acts alone.     │
-│ • Proposal sent back for     │                                            │ • Proposal killed instantly.  │
-│   community revision.        │                                            │ • Invoking King is BURNED.   │
-└──────────────────────────────┘                                            └──────────────────────────────┘
-‍‍‍‍```
+### 1. Threshold Bypass
+Any Foundation holder may **submit a governance proposal without meeting the standard proposal threshold**.
+
+### 2. Consul Veto (50% + 1 Consensus)
+During the timelock window, **more than half** of live Chair holders (`floor(liveCards / 2) + 1`) may sign a unified veto to halt a passed proposal. **No Chair is burned** under this path. The proposal returns to the community for revision.
+
+### 3. Kamikaze Veto (Emergency Sacrifice)
+Any **single** Chair holder may invoke an emergency veto by **burning their own token**, instantly killing the proposal. This bypasses consensus requirements and timelock delay.
+
+**Cost:** The invoking Chair is permanently erased from `activeCardsRegistry`. Their 1/15 fee share is redistributed equally among surviving Chairs.
+
+> A Chair activates Kamikaze only when the existential threat to the protocol exceeds the lifetime value of their perpetual fee stream.
+
+---
+
+## Chair Index (Token IDs 0–14)
+
+All Chairs share identical contract logic. Select a token ID for holder-facing documentation:
+
+| Token ID | Documentation |
+|----------|---------------|
+| 0 | [Chair #0](/foundation-lore/chair-00) |
+| 1 | [Chair #1](/foundation-lore/chair-01) |
+| 2 | [Chair #2](/foundation-lore/chair-02) |
+| 3 | [Chair #3](/foundation-lore/chair-03) |
+| 4 | [Chair #4](/foundation-lore/chair-04) |
+| 5 | [Chair #5](/foundation-lore/chair-05) |
+| 6 | [Chair #6](/foundation-lore/chair-06) |
+| 7 | [Chair #7](/foundation-lore/chair-07) |
+| 8 | [Chair #8](/foundation-lore/chair-08) |
+| 9 | [Chair #9](/foundation-lore/chair-09) |
+| 10 | [Chair #10](/foundation-lore/chair-10) |
+| 11 | [Chair #11](/foundation-lore/chair-11) |
+| 12 | [Chair #12](/foundation-lore/chair-12) |
+| 13 | [Chair #13](/foundation-lore/chair-13) |
+| 14 | [Chair #14](/foundation-lore/chair-14) |
+
+---
+
+## Veto Flow
+
+```mermaid
+flowchart TB
+  proposal[Community Proposal Passes] --> timelock[Timelock Quarantine]
+  timelock --> consul{Consul Veto?}
+  timelock --> kamikaze{Kamikaze Veto?}
+  consul -->|"50% + 1 live Chairs"| rejected[Proposal Rejected — No Burn]
+  kamikaze -->|"Single Chair burns token"| killed[Proposal Killed — Chair Burned]
+  timelock -->|No veto| execute[Proposal Executes]
+```
+
+---
+
+## NFT Art & Metadata
+
+Generative art assets for Foundation Chairs are stored under `static/assets/nft-foundations/`. Token ID 7 currently has a published render; remaining token metadata stubs are maintained for integrators and marketplaces.

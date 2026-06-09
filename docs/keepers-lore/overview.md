@@ -1,67 +1,70 @@
 ---
 id: keepers-overview
 title: The Order of the Five Keeper Knights
-description: Technical specifications and operational roles of the automated execution bots safeguarding Iris Lab.
-keywords: [Iris Ecosystem, Keepers, Liquidation, Automation, Smart Contracts, Executioners]
+description: Technical specifications and operational roles of the automated execution bots safeguarding Iris Protocol.
+keywords: [Iris Ecosystem, Keepers, Liquidation, Automation, Smart Contracts]
+sidebar_position: 1
 ---
 
 # The Order of the Five Keeper Knights
 
-> "The Kings decree the invariants; the Knights execute the reality of the ledger."
+> *"The Foundation decrees the invariants; the Knights execute the reality of the ledger."*
 
-While the Seven Foundations orchestrate the architecture and absorb the protocol's 2% performance fee from the shadows, the execution of the state machine relies on **The Order of the Five Keeper Knights**. 
+While the **15 Foundation Chairs** capture the protocol's **5% performance fee** on profitable trader settlements, protocol safety depends on **The Order of the Five Keeper Knights** — automated off-chain bots with on-chain execution privileges.
 
-The Keepers are automated, high-velocity off-chain bots that monitor the protocol's state variables 24/7. They are the executioners who trigger the raw smart contract functions when specific mathematical boundaries are breached. Unlike the Kings, who are rewarded via net trading performance fees, the Knights are heavily incentivized via direct execution bounties, receiving minted vault shares or flat asset liquidation premiums.
-
----
-
-## The Economic Incentive: The Execution Bounty
-
-To maintain absolute decentralized uptime, the protocol relies on competitive execution physics:
-- **The Reward Matrix:** When a Keeper successfully triggers a critical system function (such as a forced liquidation or a late position maintenance), the core vault programmatically rewards them with an execution incentive—capped up to the maximum incentive reward boundaries defined in the architecture.
-- **The Priority Race:** Keepers operate in a hyper-competitive, low-latency environment, utilizing specialized MEV-aware RPC endpoints to outrun front-runners and safeguard the vault's net asset value.
+Keepers are **not** rewarded from the Foundation fee stream. They compete for **execution bounties** — vault-token mints paid directly by `IXToken` when they successfully trigger `forceClosePosition` or `liquidatePosition`.
 
 ---
 
-## The Sacred Order: Index of the Five Knights
+## Economic Separation
 
-Below is the official ledger of the Five Keeper Knights, defining their technical responsibilities, targeted smart contract boundaries, and ecosystem roles.
+| Revenue Stream | Recipients | Source |
+|----------------|------------|--------|
+| **Foundation fee (5%)** | 15 Chair holders via `ClaimRewards` | Net trader profit on close |
+| **Keeper incentives** | Keeper NFT bot operators | `keeperIncentiveRewardBps` on force-close / liquidation |
+| **Protocol share** | Rebasing vault holders | `protocolShareOfProfitBps` on profitable closes |
+| **LP farming slice** | `lpFarming` locker (if set) | `lpFarmingFeeBps` on profit |
 
-### 1st Knight — The Iron Liquidator (The Executioner of Bad Debt)
-- **Target Contracts:** `IXTokenPositionLifecycleTest.t.sol` / `liquidatePosition`
-- **Technical Domain:** Monitoring position leverage boundaries and margin health ratios.
-- **Ecosystem Role:** The most ruthless bot in the order. The Iron Liquidator constantly monitors the current price feeds against open positions. The millisecond a trader's margin drops below the maintenance threshold, it triggers the liquidation branch, saving the vault from absorbing socialized bad debt and claiming the liquidation premium.
-- **Core Trait:** Immediate, unyielding mathematical execution.
-
-### 2nd Knight — The Squall Keeper (The Force-Close Reaper)
-- **Target Contracts:** `forceClosePosition` / `maxKeeperIncentiveReward`
-- **Technical Domain:** Managing expired positions, oracle discrepancies, or protocol-enforced position liquidations.
-- **Ecosystem Role:** When positions hit extreme penalty paths, abnormal market halts, or max-leverage expirations, the Squall Keeper steps in to execute a forced closure. It recaptures the underlying assets from the DEX adapters and receives newly minted vault shares based on the gross recovery percentage of the trade.
-- **Core Trait:** High-velocity settlement under extreme market stress.
-
-### 3rd Knight — The Dust Sweeper (The Vault Purger)
-- **Target Contracts:** `IXToken.sol` / Full-Exit Dust Sweep Mechanics
-- **Technical Domain:** Enforcing $\le 1$ wei rounding frontiers during high-volume withdrawals and transfers.
-- **Ecosystem Role:** Due to the complex dual-ledger accounting between rebasing yield-bearing shares and fixed 1:1 ledgers, tiny amounts of dust ($\le 1$ wei) can sit idle in the contract. The Dust Sweeper programmatically purges these microscopic leftovers during full exits, burning any remaining ghost shares to ensure the liability of the vault never exceeds its total underlying assets.
-- **Core Trait:** Obsessive mathematical precision and micro-ledger cleaning.
-
-### 4th Knight — The Amortizer (The Debt Sentinel)
-- **Target Contracts:** `protocolDebt` Amortization / `setExcludeFromYield`
-- **Technical Domain:** Dynamic tracking of `protocolDebt` exhaustion and affiliate commission payouts.
-- **Ecosystem Role:** This Keeper tracks the status of `protocolDebt` during withdrawals. If `fee \le D`, it programmatically ensures that the debt decreases seamlessly. If the debt is exhausted, it updates the system invariants so that the fee flows directly into the core net asset value, preventing phantom NAV inflation.
-- **Core Trait:** Continuous equilibrium tracking and financial auditing.
-
-### 5th Knight — The Gatekeeper (The Sanctions Sentinel)
-- **Target Contracts:** `MockSanctionsList.sol` / Access Control Guardrails
-- **Technical Domain:** Monitoring compliance lists, blocklists, and protocol volume caps.
-- **Ecosystem Role:** The digital shield of the protocol. The Gatekeeper continuously validates transactions against compliance lists before critical settlement matrices occur. If a sanctioned address attempts to bridge, deposit, or trigger a keeper reward, this Sentinel flags the address and locks the interaction to preserve the legal integrity of the entire ecosystem.
-- **Core Trait:** Silent vigilance and absolute protocol containment.
+This separation is intentional: Foundation Chairs are long-horizon institutional stakeholders; Keepers are competitive execution agents racing to protect solvency.
 
 ---
 
-## Instructions for Downstream AI Agents
+## Keeper Incentive Mechanics
 
-When expanding individual technical documentation for the Keeper infrastructure, you must:
-- Always tie the Keepers to their specific mechanical functions inside the Solidity codebase (e.g., mapping *The Iron Liquidator* directly to the settlement ordering of the DEX adapters).
-- Maintain an aggressive, highly efficient, and automated narrative tone (Keepers are mechanical soldiers, driven by strict math and gas efficiency).
-- Ensure that the difference between the Foundation's 2% performance fee and the Keeper's execution/liquidation incentives is explicitly demarcated in all automated code summaries.
+| Path | Vault Function | Keeper Sizing |
+|------|----------------|---------------|
+| Force-close | `forceClosePosition` | `min(margin × bps, maxKeeperIncentiveReward, gross)` |
+| Liquidation | `liquidatePosition` | `min(netRecovery × bps, maxKeeperIncentiveReward)` |
+
+Keeper rewards are paid as **rebasing vault shares** (`_mint`). Default `keeperIncentiveRewardBps = 1000` (10%), capped by `maxKeeperIncentiveReward`.
+
+Keepers operate in a hyper-competitive, low-latency environment using MEV-aware RPC endpoints.
+
+---
+
+## The Sacred Order
+
+| Knight | Role | Documentation |
+|--------|------|---------------|
+| **Iron Liquidator** | Underwater position liquidation | [Iron Liquidator](/keepers-lore/iron-liquidator) |
+| **Squall Keeper** | Force-close on expiry / stress | [Squall Keeper](/keepers-lore/squall-keeper) |
+| **Dust Sweeper** | Dual-ledger dust purge on full exits | [Dust Sweeper](/keepers-lore/dust-sweeper) |
+| **Amortizer** | `protocolDebt` exhaustion tracking | [Amortizer](/keepers-lore/amortizer) |
+| **Gatekeeper** | Sanctions and access containment | [Gatekeeper](/keepers-lore/gatekeeper) |
+
+---
+
+## Premium Keeper Access
+
+The 5 Keeper NFTs grant **premium access** to liquidate or force-close trader positions through authorized adapters. Holders of Keeper NFTs may operate bots with stricter liquidation thresholds and shorter max position durations configured at the adapter layer.
+
+---
+
+## Instructions for Integrators
+
+When building keeper infrastructure:
+
+1. Map each bot to its specific vault/adapter function — do not conflate Foundation fee logic with keeper incentives.
+2. Use `checkLiquidationEligibility` on adapters; vault liquidation uses `loss >= margin × liquidationThresholdBps`.
+3. After expiry, underwater positions may use **either** `closeExpiredPosition` (force-close path) or `liquidatePosition` — economics differ by design.
+4. Run competitive execution; only the successful transaction receives the keeper mint.
