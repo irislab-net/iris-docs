@@ -79,6 +79,7 @@ growthSidebar: [
       'growth/marketing-strategy',
       'growth/awareness-action-plan',
       'growth/user-onboarding-action-plan',
+      'growth/technical-carousel',
     ],
   },
 ],
