@@ -8,7 +8,7 @@
 
 ### depositWithAffiliate Mechanism
 
-On $\texttt{depositWithAffiliate}(A, \texttt{receiver}, \texttt{affiliate})$ with gross deposit $A$ (USDT wei):
+On $\texttt{depositWithAffiliate}(A, \texttt{receiver}, \texttt{affiliate})$ with gross deposit $A$ (DAI wei):
 
 $$
 \Delta D_{\text{aff}} = A \cdot \frac{\texttt{affiliateFeeBps}}{10\,000}, \quad \texttt{affiliateFeeBps} = 10
@@ -23,7 +23,7 @@ Sequence:
 
 **Depositor UX:** No upfront haircut. Affiliate earns immediate rebasing yield exposure on commission.
 
-**Book effect:** $T \mathrel{+}= \Delta D_{\text{aff}}$ while only $A$ physical USDT arrived — phantom component inflates rebasing NAV:
+**Book effect:** $T \mathrel{+}= \Delta D_{\text{aff}}$ while only $A$ physical DAI arrived — phantom component inflates rebasing NAV:
 
 $$
 R = \max(T - F, 0) \uparrow
@@ -61,7 +61,7 @@ $D$ inflates rebasing NAV but never leaves as adapter margin.
 
 ```mermaid
 flowchart TB
-  deposit[depositWithAffiliate A] --> cash[I += A physical USDT]
+  deposit[depositWithAffiliate A] --> cash[I += A physical DAI]
   deposit --> virtual[D += 0.1% A virtual]
   deposit --> affMint[affiliate rebasing shares]
   deposit --> depMint[depositor rebasing shares]

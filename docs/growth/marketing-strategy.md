@@ -19,7 +19,7 @@ sidebar_position: 1
 |----------|--------|
 | **چگونه کاربر جذب می‌شود؟** (How are users acquired?) | Through **four on-chain acquisition rails**: (1) **rebasing vault deposits** for yield seekers, (2) **leveraged spot trading** for active traders, (3) **`depositWithAffiliate`** for KOL/community referrers, and (4) **integrator partnerships** (wallets, dashboards, trading frontends). Off-chain: content, audits, testnet campaigns, and Arbitrum MirrorStation latency narrative. |
 | **CAC چقدر است؟** (What is CAC?) | **On-chain affiliate CAC = 0.1% of referred deposit** (`affiliateFeeBps = 10`), paid as rebasing shares at deposit time. Protocol books this as `protocolDebt` and **amortizes via 0.5% withdrawal fees** — effective payback when referred users withdraw or churn. **Blended off-chain CAC** (ads, events, content) is separate; target **&lt; 3 months payback** on affiliate-attributed TVL. |
-| **چرا کاربر مهاجرت کند؟** (Why should users migrate?) | **Self-custody** leveraged spot on USDT, **transparent on-chain fees** (no hidden spread), **rebasing yield** on idle capital in one vault, **Ethereum security + Arbitrum speed** (Phase 2), and **affiliate/referral earnings** for community leaders. Migration trigger: "same leverage thesis, better custody and fee visibility." |
+| **چرا کاربر مهاجرت کند؟** (Why should users migrate?) | **Self-custody** leveraged spot on DAI, **transparent on-chain fees** (no hidden spread), **rebasing yield** on idle capital in one vault, **Ethereum security + Arbitrum speed** (Phase 2), and **affiliate/referral earnings** for community leaders. Migration trigger: "same leverage thesis, better custody and fee visibility." |
 | **مزیت رقابتی چیست؟** (Competitive advantage?) | **Dual-ledger IXToken** (yield + DEX-safe fixed ledger), **unified vault + margin stack** (not siloed lending + perp DEX), **institutional Foundation overlay** (15-Chair veto layer), **keeper-automated solvency**, and **modular adapter roadmap** (spot today → lending tomorrow). |
 
 ---
@@ -42,13 +42,13 @@ Iris Protocol occupies the intersection of three DeFi categories:
 
 **Positioning statement:**
 
-> *Iris is the USDT-native execution and fund-management layer for leveraged spot traders and yield depositors — one vault, dual ledgers, on-chain fee transparency, and institutional-grade governance safeguards.*
+> *Iris is the DAI-native execution and fund-management layer for leveraged spot traders and yield depositors — one vault, dual ledgers, on-chain fee transparency, and institutional-grade governance safeguards.*
 
 ### 1.2 Target Segments (ICP)
 
 | Segment | Profile | Primary Job-to-be-Done | Iris Product Hook |
 |---------|---------|----------------------|-------------------|
-| **Yield Depositors** | USDT holders, DeFi natives, treasuries | Earn on idle stablecoins without CEX risk | Rebasing IrisX (`USDI`); trader profit share accrues to vault NAV |
+| **Yield Depositors** | DAI holders, DeFi natives, treasuries | Earn on idle stablecoins without CEX risk | Rebasing IrisX (`USDI`); trader profit share accrues to vault NAV |
 | **Leveraged Spot Traders** | ETH/alts long bias; avoid perp funding | Leveraged long spot with defined margin | Adapter v1 — 5x default, Chainlink-guarded swaps |
 | **Affiliates / KOLs** | Crypto educators, alpha groups | Monetize audience without custodial product | `depositWithAffiliate` — instant rebasing commission |
 | **Integrators** | Wallets, portfolio trackers, aggregators | Offer yield + trade in one API | IXToken ERC20 surface, permit deposits, fixed ledger for routing |
@@ -95,7 +95,7 @@ flowchart TB
 | **Developer relations** | Adapter integration guides, SDK snippets | Integrators |
 | **Community** | Discord/Telegram, governance forum | Depositors, voters |
 | **Affiliate/KOL** | Referral links with on-chain attribution | Affiliates |
-| **Content SEO** | "USDT yield", "leveraged spot DeFi", comparison pages | Organic search |
+| **Content SEO** | "DAI yield", "leveraged spot DeFi", comparison pages | Organic search |
 | **Events** | ETHDenver, Token2049, regional Web3 meetups | All segments |
 
 **Rule:** Every campaign must map to a **measurable on-chain action** (deposit, trade, lock, affiliate deposit).
@@ -120,7 +120,7 @@ From `IXToken` defaults:
 2. Protocol does **not** haircut the depositor upfront — lower friction than fee-split models.
 3. CAC is **repaid** as referred users pay withdrawal fees over time (or as churn amortizes debt).
 
-**Example (USDT 6 decimals):**
+**Example (DAI 18 decimals):**
 
 | Referred Deposit | Affiliate CAC (0.1%) | Withdrawals to Repay CAC (0.5% fee) |
 |------------------|------------------------|-------------------------------------|
@@ -179,7 +179,7 @@ On profitable trader close (defaults):
 |-----------|----------|
 | "Smart contract risk" | Audit suite (108+ tests), Foundation veto layer, keeper liquidation |
 | "Liquidity depth" | Phase 1 seed liquidity program; LP farming Phase 3 |
-| "Why not just hold USDT?" | Rebasing yield + optional governance participation |
+| "Why not just hold DAI?" | Rebasing yield + optional governance participation |
 | "Adapter trust" | Authorized adapters only; governance-controlled; same owner as vault |
 
 ### 4.3 Migration Journey (Macro)
@@ -200,7 +200,7 @@ Governance lock / affiliate referral → Arbitrum migration (Phase 2)
 |------------|------|------------------|---------------------|------------|
 | Self-custody | Yes | Yes | Yes | No |
 | Leveraged **spot** long | **Yes** | Perp swap | No | Yes |
-| Rebasing USDT vault | **Yes** | No | Partial | No |
+| Rebasing DAI vault | **Yes** | No | Partial | No |
 | Dual-ledger DEX safety | **Yes** | N/A | No | N/A |
 | On-chain fee transparency | **Yes** | Partial | Yes | No |
 | Institutional veto layer | **15 Chairs** | Rare | Rare | Centralized |
@@ -295,7 +295,7 @@ Governance lock / affiliate referral → Arbitrum migration (Phase 2)
 
 | Metric | Definition | Phase 1 Target |
 |--------|------------|----------------|
-| **TVL** | `totalAssets()` USDT equivalent | TBD by governance |
+| **TVL** | `totalAssets()` DAI equivalent | TBD by governance |
 | **Affiliate %** | Deposits via `depositWithAffiliate` / total deposits | &gt; 20% |
 | **Trader WAU** | Unique addresses opening/closing positions weekly | 100+ |
 | **CAC payback** | Months to recover affiliate `protocolDebt` per cohort | &lt; 4 months |

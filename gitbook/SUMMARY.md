@@ -17,3 +17,6 @@
 ## Technical Specifications
 
 * [System Architecture](tech-specs/architecture.md)
+* [Smart Contract Protocol](tech-specs/smart-contracts.md)
+* [Go Backend & Core Infrastructure](tech-specs/backend-go.md)
+* [Security & Audit Dispositions](tech-specs/security-audit.md)

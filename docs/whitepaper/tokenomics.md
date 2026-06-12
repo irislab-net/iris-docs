@@ -9,7 +9,7 @@ sidebar_position: 4
 
 ## IXToken — Rebasing Vault Dynamics
 
-`IXToken` (IrisX, e.g. `USDI` over USDT) is an asset-denominated ERC-20 vault share. Depositors receive rebasing balances whose value grows as `totalAssets()` increases:
+`IXToken` (IrisX, e.g. `USDI` over DAI) is an asset-denominated ERC-20 vault share. Depositors receive rebasing balances whose value grows as `totalAssets()` increases:
 
 - **Deposit:** Pull underlying → mint rebasing shares (Floor rounding)
 - **Withdraw:** Burn shares → payout assets including yield (Ceil rounding)

@@ -14,10 +14,10 @@ $$
 U = \frac{B_d}{A_s}
 $$
 
-Interest rate curves $r(U)$ incentivize equilibrium, but **leveraged spot exposure** is not native to this abstraction. A trader seeking long spot ETH with USDT collateral must typically:
+Interest rate curves $r(U)$ incentivize equilibrium, but **leveraged spot exposure** is not native to this abstraction. A trader seeking long spot ETH with DAI collateral must typically:
 
-1. Supply USDT to pool $P_1$;
-2. Borrow USDT or WETH from pool $P_2$;
+1. Supply DAI to pool $P_1$;
+2. Borrow DAI or WETH from pool $P_2$;
 3. Swap on an external DEX;
 4. Manage health factor $HF = \frac{\sum_i C_i \cdot p_i}{\sum_j D_j \cdot p_j}$ across independent oracle surfaces.
 
@@ -31,7 +31,7 @@ $$
 \eta_{\text{frag}} = \frac{V_{\text{deployed}}}{\sum_{i=1}^{n} C_i}
 $$
 
-where $V_{\text{deployed}}$ is notional trading exposure and $C_i$ is capital parked in venue $i$ (supply buffers, borrow collateral, DEX LP, wallet dust). Empirically, $\eta_{\text{frag}} \ll 1$ for retail and integrator flows: a material fraction of USDT remains unproductive in supply pools while margin sits in separate contract namespaces.
+where $V_{\text{deployed}}$ is notional trading exposure and $C_i$ is capital parked in venue $i$ (supply buffers, borrow collateral, DEX LP, wallet dust). Empirically, $\eta_{\text{frag}} \ll 1$ for retail and integrator flows: a material fraction of DAI remains unproductive in supply pools while margin sits in separate contract namespaces.
 
 ### The Rebasing–Margin Incompatibility
 
@@ -62,7 +62,7 @@ Default $\texttt{maxOpenPositionsVolumeBps} = 5000$ permits at most 50% of **phy
 ```mermaid
 flowchart TB
   subgraph fragmented [Fragmented Stack]
-    L1[Lending Pool USDT] -->|borrow loop| L2[DEX Swap]
+    L1[Lending Pool DAI] -->|borrow loop| L2[DEX Swap]
     L2 -->|margin elsewhere| L3[Perp or Spot Venue]
     L1 -.->|idle supply| I1[Unproductive Capital]
   end
@@ -84,7 +84,7 @@ flowchart TB
 Standard on-chain leveraged implementations route swaps through public mempools. A trader opening long spot exposure submits:
 
 $$
-\texttt{swap}(\text{USDT} \rightarrow \text{target}, \Delta)
+\texttt{swap}(\text{DAI} \rightarrow \text{target}, \Delta)
 $$
 
 An adversary observing this intent can construct a sandwich:
@@ -109,7 +109,7 @@ Leveraged spot via external DEX routing avoids funding drag but exposes the open
 
 ### Oracle Path Rigidity
 
-Many implementations rely on a single oracle tick at execution time without cross-feed normalization. For target token $\tau$ and underlying $\upsilon$ (USDT), a naive price ratio:
+Many implementations rely on a single oracle tick at execution time without cross-feed normalization. For target token $\tau$ and underlying $\upsilon$ (DAI), a naive price ratio:
 
 $$
 \hat{p}_{\tau/\upsilon} = \frac{P_\tau}{P_\upsilon}
@@ -125,7 +125,7 @@ where $a$ is allocated principal and $m$ is margin — potentially triggering sp
 
 ### Iris Adapter Mitigation Model
 
-`IrisLeveragedSpotV1Adapter` enforces **cross-price slippage floors** using separate Chainlink USD feeds for target and underlying (USDT/USDC stable underlying accepted at deployment). Expected token amount on open:
+`IrisLeveragedSpotV1Adapter` enforces **cross-price slippage floors** using separate Chainlink USD feeds for target and underlying (DAI stable underlying accepted at deployment). Expected token amount on open:
 
 $$
 \mathbb{E}[\text{tokens}] = \frac{b \cdot P_\upsilon \cdot 10^{d_\tau}}{P_\tau \cdot 10^{d_\upsilon}} \cdot \frac{1}{10^{d_{\text{base}}}}
@@ -157,7 +157,7 @@ sequenceDiagram
 
   Trader->>Adapter: openPosition(m, a, calldata)
   Adapter->>Vault: openPosition(id, trader, m, a)
-  Vault->>Vault: S += m + a; transfer USDT
+  Vault->>Vault: S += m + a; transfer DAI
   Adapter->>Executor: approve + call(swapData)
   Executor-->>Adapter: target tokens
   Adapter->>Chainlink: _getSafePrice feeds
@@ -172,7 +172,7 @@ $$
 K_{\text{liq}} = \min\left( r_{\text{net}} \cdot \frac{\texttt{keeperIncentiveRewardBps}}{10\,000}, \, K_{\max} \right)
 $$
 
-Default $\texttt{keeperIncentiveRewardBps} = 1000$, $K_{\max} = 500 \times 10^6$ USDT wei. Five Keeper NFTs compete on latency — premium keepers receive stricter liquidation thresholds and shorter max position durations at the adapter layer. Competitive execution converts MEV on liquidation from **extractable by arbitrary searchers** into **bounded protocol-sanctioned bounties** — solvency maintenance is incentivized, not adversarially exploited without bound.
+Default $\texttt{keeperIncentiveRewardBps} = 1000$, $K_{\max} = 500 \times 10^{18}$ DAI wei. Five Keeper NFTs compete on latency — premium keepers receive stricter liquidation thresholds and shorter max position durations at the adapter layer. Competitive execution converts MEV on liquidation from **extractable by arbitrary searchers** into **bounded protocol-sanctioned bounties** — solvency maintenance is incentivized, not adversarially exploited without bound.
 
 ---
 

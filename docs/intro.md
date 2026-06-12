@@ -25,7 +25,7 @@ Iris Protocol is a modular leveraged trading stack built around **IrisX** (`IXTo
 
 ## Core Components
 
-- **IXToken (IrisX)** — Rebasing vault share over underlying USDT with a parallel fixed 1:1 ledger for DEX safety
+- **IXToken (IrisX)** — Rebasing vault share over underlying DAI with a parallel fixed 1:1 ledger for DEX safety
 - **VotingEscrow** — Lock IXToken for governance weight (block-number clock)
 - **IrisGovernor** — Community proposals routed through a timelock controller
 - **The Iris Foundation** (`IRIS-FOUNDATION`) — 15 ERC721 Chairs at `0x00008c80D4cBD653B1D384566d9b23B37d100000`

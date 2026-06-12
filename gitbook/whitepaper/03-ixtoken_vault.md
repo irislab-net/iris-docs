@@ -1,6 +1,6 @@
 # The IXToken (IrisX) Vault Invariant & Global Accounting
 
-`IXToken` (branded **IrisX**, e.g. `USDI` over USDT) is the accounting kernel of Iris Protocol. Implemented as a UUPS-upgradeable contract on Cancun EVM with `ReentrancyGuardTransient` (EIP-1153) on heavy paths, it exposes an ERC20 surface denominated in **USDT wei** (6 decimals) while internally maintaining rebasing shares $\sigma$, fixed liabilities $F$, and a position registry driving $S$. This chapter specifies the valuation framework, dual-ledger isolation, and rounding policy that all downstream subsystems must preserve.
+`IXToken` (branded **IrisX**, e.g. `USDI` over DAI) is the accounting kernel of Iris Protocol. Implemented as a UUPS-upgradeable contract on Cancun EVM with `ReentrancyGuardTransient` (EIP-1153) on heavy paths, it exposes an ERC20 surface denominated in **DAI wei** (18 decimals) while internally maintaining rebasing shares $\sigma$, fixed liabilities $F$, and a position registry driving $S$. This chapter specifies the valuation framework, dual-ledger isolation, and rounding policy that all downstream subsystems must preserve.
 
 ---
 
@@ -16,7 +16,7 @@ $$
 
 | Symbol | Contract field | Definition |
 |--------|----------------|------------|
-| $I$ | `_underlying.balanceOf(vault)` | Idle USDT cash — **physical redemption ceiling** |
+| $I$ | `_underlying.balanceOf(vault)` | Idle DAI cash — **physical redemption ceiling** |
 | $D$ | `protocolDebt` | Virtual affiliate IOU (optimistic CAC; disposition C-1) |
 | $S$ | `assetsInStrategy` | Aggregate $\sum_j (m_j + a_j)$ booked across open positions |
 
@@ -64,7 +64,7 @@ $$
 \texttt{maxWithdraw}(u) \leq I
 $$
 
-Book NAV $\texttt{balanceOf}(u)$ may exceed physically redeemable USDT when $S > 0$ or $D > 0$. Integrators must surface $\texttt{maxWithdraw}$, not raw balance.
+Book NAV $\texttt{balanceOf}(u)$ may exceed physically redeemable DAI when $S > 0$ or $D > 0$. Integrators must surface $\texttt{maxWithdraw}$, not raw balance.
 
 ### Position Booking at Open
 
@@ -85,7 +85,7 @@ Deploy is book-neutral at $\Delta T = 0$: strategy booking shifts value from $I$
 ```mermaid
 flowchart LR
   subgraph partitions [T = I + D + S]
-    I_box["I idle USDT"]
+    I_box["I idle DAI"]
     D_box["D protocolDebt"]
     S_box["S assetsInStrategy"]
   end
@@ -110,9 +110,9 @@ Each address $a$ has $\texttt{isExcludedFromYield}[a] \in \{\texttt{false}, \tex
 | Mode | Flag | Storage | Balance function | Yield |
 |------|------|---------|------------------|-------|
 | Rebasing | `false` | `_shares[a]` | $\lfloor \texttt{convertToAssets}(\sigma_a) \rfloor$ | Accrues as $T \uparrow$ |
-| Fixed | `true` | `_fixedBalances[a]` | $F_a$ exactly (1:1 USDT wei) | None |
+| Fixed | `true` | `_fixedBalances[a]` | $F_a$ exactly (1:1 DAI wei) | None |
 
-User-facing transfers $\texttt{transfer(to, amount)}$ and $\texttt{withdraw}$ denominate **amount** in underlying USDT wei regardless of mode.
+User-facing transfers $\texttt{transfer(to, amount)}$ and $\texttt{withdraw}$ denominate **amount** in underlying DAI wei regardless of mode.
 
 ### State Transition: Ledger Migration
 
@@ -123,7 +123,7 @@ $\texttt{setExcludeFromYield}(a, \texttt{exclude})$ executes:
 3. If migrating to rebasing: clear $F_a$, mint $\sigma_a$ via $\lfloor \texttt{convertToShares}(b) \rfloor$;
 4. Revert $\texttt{ZeroSharesMinted}$ if fixed→rebasing yields zero shares (dust guard).
 
-**Adapter invariant:** On $\texttt{openPosition}$, margin $m$ is pulled via $\texttt{\_executeTransfer(trader, adapter, } m)$ into the adapter's **fixed** ledger ($\texttt{setAdapterStatus}$ forces adapter onto fixed mode). Margin amount remains constant in USDT wei for the position lifetime.
+**Adapter invariant:** On $\texttt{openPosition}$, margin $m$ is pulled via $\texttt{\_executeTransfer(trader, adapter, } m)$ into the adapter's **fixed** ledger ($\texttt{setAdapterStatus}$ forces adapter onto fixed mode). Margin amount remains constant in DAI wei for the position lifetime.
 
 ### Global Ledger Consistency
 

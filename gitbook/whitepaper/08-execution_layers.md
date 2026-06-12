@@ -21,7 +21,7 @@ The adapter calls $\texttt{executor.call(data)}$ with **capped ERC20 approvals**
 Safety invariants enforced at execution time:
 
 1. **Approval cap:** $\texttt{approve(executor, } \Delta_{\max})$ limited to swap leg size;
-2. **Balance delta:** $\Delta \texttt{bal}(\text{target})$ and $\Delta \texttt{bal}(\text{USDT})$ verified post-call;
+2. **Balance delta:** $\Delta \texttt{bal}(\text{target})$ and $\Delta \texttt{bal}(\text{DAI})$ verified post-call;
 3. **Slippage floor:** Received amount $\geq$ Chainlink cross-price expectation minus $\delta_s$;
 4. **Reentrancy guard:** $\texttt{ReentrancyGuard}$ on adapter entrypoints.
 
@@ -35,7 +35,7 @@ $$
 \texttt{SHORT} \Rightarrow \texttt{DirectionNotSupported}
 $$
 
-Target token $\tau \neq$ underlying $\upsilon$ (USDT).
+Target token $\tau \neq$ underlying $\upsilon$ (DAI).
 
 ### Trust Boundary
 
@@ -66,13 +66,13 @@ Per-position approval not required — account-level delegation.
 
 ### Feed Architecture
 
-Per-token $\texttt{PositionConfig.chainlinkPriceFeed}$ for target $\tau$; immutable $\texttt{underlyingChainlinkFeed}$ for USDT/USDC underlying $\upsilon$.
+Per-token $\texttt{PositionConfig.chainlinkPriceFeed}$ for target $\tau$; immutable $\texttt{underlyingChainlinkFeed}$ for DAI underlying $\upsilon$.
 
 Price extraction via $\texttt{\_getSafePrice}$: staleness and round-id checks on target feed; underlying stablecoin oracle risk accepted at deployment.
 
-### Open Leg (USDT → Target)
+### Open Leg (DAI → Target)
 
-Given base amount $b$ (USDT wei to swap), target decimals $d_\tau$, underlying feed decimals $d_\upsilon$, target feed decimals $d_f$:
+Given base amount $b$ (DAI wei to swap), target decimals $d_\tau$, underlying feed decimals $d_\upsilon$, target feed decimals $d_f$:
 
 $$
 \mathbb{E}[\text{tokens}] = \frac{b \cdot P_\upsilon \cdot 10^{d_\tau} \cdot 10^{d_f}}{P_\tau \cdot 10^{d_\upsilon} \cdot 10^{d_{\text{base}}}}
@@ -86,7 +86,7 @@ $$
 
 or revert $\texttt{OpenSlippageExceeded}$.
 
-### Close / Liquidation Leg (Target → USDT)
+### Close / Liquidation Leg (Target → DAI)
 
 Symmetric with $\texttt{tokensSold}$ / $\texttt{currentTokenAmount}$. Liquidation slippage checked against **pre-swap MTM** (disposition C-05: accepted game); vault loss band re-validated on post-swap $G$.
 
@@ -112,7 +112,7 @@ Auditors must verify decimal normalization in $\texttt{\_getSafePrice}$ for each
 flowchart TB
   subgraph feeds [Chainlink USD Feeds]
     Ptau[P_tau target USD]
-    Pups[P_upsilon USDT USD]
+    Pups[P_upsilon DAI USD]
   end
   subgraph calc [Cross-Price]
     ratio["p_tau/upsilon = P_tau / P_upsilon normalized"]

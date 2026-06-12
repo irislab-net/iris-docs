@@ -11,8 +11,8 @@
 
 | Layer | Spec |
 |-------|------|
-| **Underlying** | USDT (6 decimals) — unit of account, liquidity, collateral |
-| **IXToken (IrisX)** | Rebasing vault token over USDT (e.g. `USDI`); dual-ledger (rebasing + fixed 1:1) |
+| **Underlying** | DAI (18 decimals) — unit of account, liquidity, collateral |
+| **IXToken (IrisX)** | Rebasing vault token over DAI (e.g. `USDI`); dual-ledger (rebasing + fixed 1:1) |
 | **Foundation NFT** | `ERC721("The Iris Foundation", "IRIS-FOUNDATION")` @ `0x00008c80D4cBD653B1D384566d9b23B37d100000` |
 | **Foundation supply** | **15 Chairs**, token IDs **0–14**, **functionally identical** — no on-chain names or trait tiers |
 | **Foundation fee** | **5%** of trader profit on close (`foundationFeeBps = 500`) |
@@ -38,13 +38,13 @@
 
 Iris Protocol is a modular **leveraged spot trading** and **on-chain fund management** stack:
 
-- **Depositors** supply USDT liquidity via IrisX and earn rebasing yield.
+- **Depositors** supply DAI liquidity via IrisX and earn rebasing yield.
 - **Traders** open leveraged long spot positions through authorized DEX adapters.
 - **Governance voters** lock IXToken in VotingEscrow and vote on parameters/upgrades.
 - **Foundation Chair holders** (15 NFTs) capture 5% of trading profits and hold tactical veto authority.
 - **Keeper operators** (5 NFTs) run bots that liquidate unhealthy positions for execution bounties.
 
-**Vision:** Institutional-grade stablecoin infrastructure (USDT-scale reliability) with full decentralization and Aave-grade composable fund management.
+**Vision:** Institutional-grade stablecoin infrastructure (DAI-scale reliability) with full decentralization and Aave-grade composable fund management.
 
 **Tagline:** *"The Foundation issues the credit lines; the network executes the reality of the ledger."*
 
@@ -207,7 +207,7 @@ Keepers are **orthogonal** to Foundation fee capture. They compete for **executi
 
 ### What It Is
 
-- ERC20-facing vault share denominated in **underlying asset units** (USDT wei).
+- ERC20-facing vault share denominated in **underlying asset units** (DAI wei).
 - **Dual-ledger:** rebasing yield-bearing balances + fixed 1:1 balances for DEX/integration safety.
 - **Margin execution vault** funding authorized adapters — not an over-collateralized lending pool.
 
@@ -455,7 +455,7 @@ Leveraged **long spot** via generic swap engine:
 
 ### Oracle / Slippage
 
-- Cross-price via Chainlink: target/USD + underlying/USD (USDT/USDC stable).
+- Cross-price via Chainlink: target/USD + underlying/USD (DAI stable).
 - Default slippage 1%; hard cap 3%.
 - Open/close slippage formulas use feed decimals normalization.
 
@@ -589,7 +589,7 @@ pnpm start    # dev server
 
 | Term | Meaning |
 |------|---------|
-| **IrisX / IXToken** | Rebasing vault token over underlying USDT |
+| **IrisX / IXToken** | Rebasing vault token over underlying DAI |
 | **Shares** | Internal rebasing units (`_shares`), not a separate ERC20 |
 | **Fixed ledger** | 1:1 internal balance for adapters/DEX |
 | **Adapter** | Authorized `IIrisAdapter` bridging vault ↔ DEX |

@@ -13,7 +13,7 @@ Governance operates through a standard OpenZeppelin Governor stack with voting e
 
 Protocol safety is maintained by **5 Keeper NFTs** that authorize competitive off-chain bots to liquidate underwater positions and force-close expired trades, compensated through vault-token mint incentives distinct from the Foundation fee stream.
 
-The protocol's vision is to achieve the scale and reliability of institutional stablecoin infrastructure while preserving full decentralization — analogous to USDT's ubiquity in a trust-minimized form, with Aave-grade fund management composability.
+The protocol's vision is to achieve the scale and reliability of institutional stablecoin infrastructure while preserving full decentralization — analogous to DAI's ubiquity in a trust-minimized form, with Aave-grade fund management composability.
 
 **Primary innovations:**
 

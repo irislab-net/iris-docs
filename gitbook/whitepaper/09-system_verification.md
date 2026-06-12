@@ -109,7 +109,7 @@ flowchart TB
 | Symbol | Definition |
 |--------|------------|
 | $T$ | $\texttt{totalAssets()} = I + D + S$ |
-| $I$ | Idle USDT in vault |
+| $I$ | Idle DAI in vault |
 | $D$ | $\texttt{protocolDebt}$ (virtual affiliate IOU) |
 | $S$ | $\texttt{assetsInStrategy}$ |
 | $F$ | $\texttt{\_totalFixedBalances}$ |
@@ -194,8 +194,8 @@ $$
 
 | Function | Role |
 |----------|------|
-| `deposit` / `depositWithAffiliate` | USDT intake |
-| `withdraw` | USDT output + fee + $D$ amortization |
+| `deposit` / `depositWithAffiliate` | DAI intake |
+| `withdraw` | DAI output + fee + $D$ amortization |
 | `openPosition` | Book $S$; adapter only |
 | `closePosition` | Settlement branches |
 | `forceClosePosition` | Expiry keeper path |
@@ -207,7 +207,7 @@ $$
 
 | Term | Meaning |
 |------|---------|
-| **IrisX / IXToken** | Rebasing vault token over USDT |
+| **IrisX / IXToken** | Rebasing vault token over DAI |
 | **Adapter** | `IrisLeveragedSpotV1Adapter` |
 | **Executor** | Off-chain swap router (permissionless) |
 | **Keeper** | 5-NFT execution corps |

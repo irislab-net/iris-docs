@@ -18,7 +18,7 @@ All checkpoint lookups $\texttt{getPastVotes}(u, b)$ and $\texttt{getPastTotalSu
 
 ### Lock Structure
 
-User locks USDT-denominated IrisX for duration $D_b$ blocks:
+User locks DAI-denominated IrisX for duration $D_b$ blocks:
 
 $$
 D_b \in [\texttt{MIN\_LOCK}, \, \texttt{MAX\_LOCK}] = [50\,400, \, 10\,512\,000]

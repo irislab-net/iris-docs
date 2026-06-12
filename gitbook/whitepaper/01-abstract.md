@@ -2,7 +2,7 @@
 
 ## Structural Overview
 
-Iris Protocol is a **modular margin execution suite** deployed on Ethereum-class networks (Cancun EVM tier). It is architecturally distinct from over-collateralized lending pools (e.g., Aave-style borrow/lend markets): capital is not allocated through discrete loan books with independent liquidation engines. Instead, a single vault token — **IrisX** (`IXToken`) — denominates all liabilities in **USDT** (6 decimals), books deployed strategy capital in a unified ledger, and authorizes external **execution adapters** to open, close, and liquidate leveraged **long spot** positions against that book.
+Iris Protocol is a **modular margin execution suite** deployed on Ethereum-class networks (Cancun EVM tier). It is architecturally distinct from over-collateralized lending pools (e.g., Aave-style borrow/lend markets): capital is not allocated through discrete loan books with independent liquidation engines. Instead, a single vault token — **IrisX** (`IXToken`) — denominates all liabilities in **DAI** (18 decimals), books deployed strategy capital in a unified ledger, and authorizes external **execution adapters** to open, close, and liquidate leveraged **long spot** positions against that book.
 
 The protocol decomposes into four structurally coupled planes:
 
@@ -13,7 +13,7 @@ The protocol decomposes into four structurally coupled planes:
 | **Governance** | `VotingEscrow` → `IrisGovernor` → `TimelockController` | Parameter control, upgrades, adapter authorization |
 | **Institutional overlay** | The Iris Foundation (15 ERC721 Chairs) + 5 Keeper NFTs | Fee capture, veto circuit breakers, solvency execution |
 
-Five participant classes interact with these planes: **depositors** (rebasing yield on USDT liquidity), **traders** (margin-posted leveraged spot), **governance voters** (IXToken locked in `VotingEscrow`), **Foundation Chair holders** (token IDs 0–14, functionally identical on-chain), and **Keeper operators** (competitive liquidation and force-close execution).
+Five participant classes interact with these planes: **depositors** (rebasing yield on DAI liquidity), **traders** (margin-posted leveraged spot), **governance voters** (IXToken locked in `VotingEscrow`), **Foundation Chair holders** (token IDs 0–14, functionally identical on-chain), and **Keeper operators** (competitive liquidation and force-close execution).
 
 The global valuation invariant that binds the accounting plane is:
 
@@ -21,7 +21,7 @@ $$
 T = I + D + S
 $$
 
-where $T = \texttt{totalAssets()}$, $I$ is idle underlying USDT held by the vault, $D$ is $\texttt{protocolDebt}$ (virtual affiliate obligation), and $S$ is $\texttt{assetsInStrategy}$ (aggregate margin plus allocation booked across open positions). Gross liabilities to token holders satisfy:
+where $T = \texttt{totalAssets()}$, $I$ is idle underlying DAI held by the vault, $D$ is $\texttt{protocolDebt}$ (virtual affiliate obligation), and $S$ is $\texttt{assetsInStrategy}$ (aggregate margin plus allocation booked across open positions). Gross liabilities to token holders satisfy:
 
 $$
 \texttt{totalSupply()} = \texttt{convertToAssets}(\sigma) + F
@@ -47,7 +47,7 @@ flowchart TB
     Keep[5 Keeper NFTs]
   end
 
-  Depositors -->|deposit USDT| IXToken
+  Depositors -->|deposit DAI| IXToken
   Traders -->|margin + leverage| Adapter
   Adapter -->|openPosition closePosition| IXToken
   VE -->|block-number weight| Gov
@@ -72,7 +72,7 @@ Each address $a$ carries a flag $\texttt{isExcludedFromYield}[a]$:
 | Mode | Condition | Storage | Balance view | Yield accrual |
 |------|-----------|---------|--------------|---------------|
 | **Rebasing** | $\texttt{isExcludedFromYield}[a] = \texttt{false}$ | $\texttt{\_shares}[a]$ | $\lfloor \texttt{convertToAssets}(\sigma_a) \rfloor$ (Floor) | Yes — via rising $T$ |
-| **Fixed** | $\texttt{isExcludedFromYield}[a] = \texttt{true}$ | $\texttt{\_fixedBalances}[a]$ | Exact 1:1 USDT wei | No |
+| **Fixed** | $\texttt{isExcludedFromYield}[a] = \texttt{true}$ | $\texttt{\_fixedBalances}[a]$ | Exact 1:1 DAI wei | No |
 
 Migration between modes is affected by $\texttt{setExcludeFromYield(account, exclude)}$, which snapshots $\texttt{balanceOf}(a)$ before atomic ledger transfer. Adapter margin posts exclusively to the **fixed** ledger, eliminating rebasing drift at the swap boundary. Depositors default to the **rebasing** ledger and accrue yield as trading activity and fee retention increase $T$.
 
@@ -86,13 +86,13 @@ $$
 
 The vault never executes DEX swaps. Authorized adapters:
 
-1. Call $\texttt{openPosition}$ to book $(\texttt{margin}, \texttt{allocated})$ into $S$ and transfer underlying USDT to the adapter.
+1. Call $\texttt{openPosition}$ to book $(\texttt{margin}, \texttt{allocated})$ into $S$ and transfer underlying DAI to the adapter.
 2. Route swaps through off-chain-selected **executors** (aggregators, routers) with on-chain balance-delta and slippage verification — not an on-chain router allowlist (disposition C-03: by design).
 3. Report $\texttt{totalReturnAssets}$ on close, force-close, or liquidation; the vault applies PnL branches and fee waterfalls without an embedded price oracle.
 
 ```mermaid
 stateDiagram-v2
-  [*] --> RebasingLedger: deposit USDT
+  [*] --> RebasingLedger: deposit DAI
   RebasingLedger --> FixedLedger: setExcludeFromYield true
   FixedLedger --> RebasingLedger: setExcludeFromYield false
   RebasingLedger --> YieldAccrual: T increases
@@ -164,7 +164,7 @@ Under defaults ($\texttt{withdrawalFeeBps} = 50$, $\texttt{affiliateFeeBps} = 10
 ```mermaid
 flowchart LR
   subgraph depositors [Depositor Vector]
-    D1[USDT deposit] --> D2[Rebasing sigma]
+    D1[DAI deposit] --> D2[Rebasing sigma]
     D2 --> D3[Yield from T growth]
   end
   subgraph traders [Trader Vector]

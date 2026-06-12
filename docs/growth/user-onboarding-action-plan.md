@@ -66,8 +66,8 @@ flowchart TB
 | **1. Discover** | Read [Public Brief](/whitepaper/public-brief) | Docs site | Clicks "Deposit" CTA |
 | **2. Connect** | MetaMask / Rabby / WalletConnect | Web3 provider | Address connected |
 | **3. Network** | Switch to Ethereum mainnet | Chain ID 1 | Correct network |
-| **4. Acquire USDT** | Hold or swap to USDT | External DEX | USDT balance ≥ min deposit |
-| **5. Approve** | `approve(IXToken, amount)` on USDT | ERC20 approve | Allowance set |
+| **4. Acquire DAI** | Hold or swap to DAI | External DEX | DAI balance ≥ min deposit |
+| **5. Approve** | `approve(IXToken, amount)` on DAI | ERC20 approve | Allowance set |
 | **6. Deposit** | `deposit(assets, receiver)` or `depositWithPermit` | IXToken | Shares minted; rebasing balance visible |
 | **7. Confirm** | View balance on Etherscan + app | `balanceOf` increases over time | User sees position |
 
@@ -83,7 +83,7 @@ flowchart TB
 
 | Screen | Copy |
 |--------|------|
-| Pre-deposit | "You deposit USDT. You receive IrisX (USDI). Your balance grows as the vault earns." |
+| Pre-deposit | "You deposit DAI. You receive IrisX (USDI). Your balance grows as the vault earns." |
 | Rebasing explain | "No claim button — your balance increases as `totalAssets()` grows." |
 | Withdraw warn | "Large withdrawals depend on available vault cash. Check max withdraw." |
 | Affiliate note | "Referred by a friend? Use their link so they earn 0.1% — you pay nothing extra." |
@@ -105,8 +105,8 @@ flowchart TB
 
 | Step | User Action | Protocol | Success Criteria |
 |------|-------------|----------|------------------|
-| **1. Prerequisites** | Hold USDT + IrisX margin understanding | — | Read risk disclaimer |
-| **2. Fund margin** | Deposit USDT → IrisX OR hold IrisX | `deposit` | Margin balance available |
+| **1. Prerequisites** | Hold DAI + IrisX margin understanding | — | Read risk disclaimer |
+| **2. Fund margin** | Deposit DAI → IrisX OR hold IrisX | `deposit` | Margin balance available |
 | **3. Approve margin** | `approve(adapter, margin)` | IXToken allowance | Adapter can pull margin |
 | **4. Select market** | Choose ETH (Phase 1) | Adapter UI | Token config exists |
 | **5. Set params** | Margin, leverage (≤ 5x default), slippage | Adapter `openPosition` | Valid position config |
@@ -150,7 +150,7 @@ Display and require acknowledgment:
 | Step | Action |
 |------|--------|
 | 1 | Announce MirrorStation with latency benchmarks |
-| 2 | "Bridge USDT → Arbitrum IrisX" wizard |
+| 2 | "Bridge DAI → Arbitrum IrisX" wizard |
 | 3 | Side-by-side gas comparison (L1 vs L2) |
 | 4 | Same risk gate + adapter UX on L2 |
 
@@ -257,7 +257,7 @@ depositor calls depositWithAffiliate(assets, receiver, affiliate)
 | Failure | User Message | Recovery Path |
 |---------|--------------|---------------|
 | Wrong network | "Switch to Ethereum mainnet" | Network switch button |
-| Insufficient USDT | "You need USDT to deposit" | Link to swap widget |
+| Insufficient DAI | "You need DAI to deposit" | Link to swap widget |
 | Below min deposit | Show `minimumDepositAssetAmount` | Adjust amount input |
 | Sanctioned address | "Address not permitted" | Link to Gatekeeper docs |
 | Insufficient gas | Gas estimate + buffer | Faucet link (testnet only) |

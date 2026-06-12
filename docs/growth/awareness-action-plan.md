@@ -29,7 +29,7 @@ sidebar_position: 2
 
 | Audience | Core Message | Primary Channel |
 |----------|--------------|-----------------|
-| **DeFi depositors** | "Earn rebasing yield on USDT — transparent, on-chain." | Twitter, YouTube, newsletters |
+| **DeFi depositors** | "Earn rebasing yield on DAI — transparent, on-chain." | Twitter, YouTube, newsletters |
 | **Traders** | "Leveraged spot long on ETH — self-custody, no funding rates." | Trading Twitter, alpha groups |
 | **Developers** | "Dual-ledger vault + adapter API — integrate once." | GitHub, Dev.to, hackathons |
 | **KOLs / affiliates** | "0.1% instant rebasing commission on every referred deposit." | Direct BD, affiliate brief |
@@ -131,8 +131,8 @@ flowchart LR
 ### 6.1 Twitter / X
 
 - Pin: Mainnet links + docs + audit
-- Hashtags: `#DeFi` `#USDT` `#LeveragedTrading` `#Ethereum` (not spammy)
-- Engage: Reply to USDT yield, ETH leverage, and DeFi safety conversations
+- Hashtags: `#DeFi` `#DAI` `#LeveragedTrading` `#Ethereum` (not spammy)
+- Engage: Reply to DAI yield, ETH leverage, and DeFi safety conversations
 - Avoid: Price speculation, guaranteed returns language
 
 ### 6.2 YouTube / Video

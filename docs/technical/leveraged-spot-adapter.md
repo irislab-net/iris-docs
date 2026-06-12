@@ -29,7 +29,7 @@ The adapter is authorized by the vault (`onlyAuthorizedAdapter`). Margin posts v
 
 | Term | Meaning |
 |------|---------|
-| **Underlying** | Collateral token (e.g. USDT) |
+| **Underlying** | Collateral token (e.g. DAI) |
 | **Target token** | Long exposure (e.g. WETH); must ≠ underlying |
 | **Margin** | Trader-posted collateral |
 | **Allocation** | Vault liquidity deployed to the position |

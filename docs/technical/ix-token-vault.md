@@ -7,7 +7,7 @@ sidebar_position: 1
 
 # IXToken Vault Architecture
 
-`IXToken` is the flagship IrisX vault token — a UUPS-upgradeable ERC-20 over an underlying asset (e.g. USDT). It implements rebasing yield-bearing shares alongside a fixed 1:1 ledger for DEX and adapter safety.
+`IXToken` is the flagship IrisX vault token — a UUPS-upgradeable ERC-20 over an underlying asset (e.g. DAI). It implements rebasing yield-bearing shares alongside a fixed 1:1 ledger for DEX and adapter safety.
 
 **Source:** [`iris-core/src/IXToken.sol`](https://github.com/irislab-net/iris-core)
 

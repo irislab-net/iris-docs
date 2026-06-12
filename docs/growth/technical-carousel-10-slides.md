@@ -40,7 +40,7 @@ Accounting plane →  IXToken: I, D, S, σ, F  (isolated invariants)
 **System Topography & Core Matrix**
 
 ### Technical Breakdown
-- **Pillar 1 — Underlying (USDT):** 6-decimal unit of account. All user-facing balances denominated in underlying wei. No internal "share token" ERC20 — `IXToken` *is* the asset-denominated surface.
+- **Pillar 1 — Underlying (DAI):** 18-decimal unit of account. All user-facing balances denominated in underlying wei. No internal "share token" ERC20 — `IXToken` *is* the asset-denominated surface.
 - **Pillar 2 — IXToken (Dual-Ledger):** UUPS proxy on Cancun EVM. `ReentrancyGuardTransient` (EIP-1153) on heavy paths. Rebasing `_shares` + fixed `_fixedBalances` under `isExcludedFromYield`.
 - **Pillar 3 — Foundation (15 Chairs):** `ERC721("The Iris Foundation", "IRIS-FOUNDATION")` @ `0x00008c80D4cBD653B1D384566d9b23B37d100000`. Token IDs 0–14, functionally identical. `ClaimRewards(token)` equal-split among live cards. **5%** of gross trade profit (`foundationFeeBps = 500`).
 - **Pillar 4 — Keeper Corps (5 NFTs):** Execution keys for `liquidatePosition` / `forceClosePosition`. Paid via `_mint` rebasing shares — **orthogonal rail** to Foundation fee capture.
@@ -48,7 +48,7 @@ Accounting plane →  IXToken: I, D, S, σ, F  (isolated invariants)
 
 ### The Code/Formula Accent
 ```
-USDT → IXToken (I,D,S,σ,F) ← IIrisAdapter ← Trader/Keeper
+DAI → IXToken (I,D,S,σ,F) ← IIrisAdapter ← Trader/Keeper
          ↑                      ↑
     Foundation 5%          Keeper mint (bps)
     ClaimRewards           ≠ Foundation rail
@@ -242,7 +242,7 @@ where:
 clock() = block.number          (IERC6372)
 votingDelay    = 21_600 blocks  (~3 days @ 12s)
 votingPeriod   = 151_200 blocks (~21 days @ 12s)
-proposalThreshold = 1_000 × 10^6 voting units
+proposalThreshold = 1_000 × 10^{18} voting units
 quorumFraction = 10%
 ```
 

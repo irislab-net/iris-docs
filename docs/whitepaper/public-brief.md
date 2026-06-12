@@ -9,7 +9,7 @@ sidebar_position: 1
 
 ## What Is Iris?
 
-Iris Protocol is a decentralized leveraged trading and fund-management stack built on Ethereum. At its core is **IrisX** (`IXToken`) — a vault token that wraps USDT, accrues yield through rebasing shares, and funds leveraged spot positions via authorized DEX adapters.
+Iris Protocol is a decentralized leveraged trading and fund-management stack built on Ethereum. At its core is **IrisX** (`IXToken`) — a vault token that wraps DAI, accrues yield through rebasing shares, and funds leveraged spot positions via authorized DEX adapters.
 
 The protocol aims to deliver **stable, transparent on-chain fund management** — combining the capital efficiency of centralized trading infrastructure with the custody guarantees of smart contracts.
 
@@ -17,7 +17,7 @@ The protocol aims to deliver **stable, transparent on-chain fund management** �
 
 ## How It Works (In Plain Terms)
 
-1. **Deposit USDT** into the IrisX vault and receive vault tokens representing your share of the pool.
+1. **Deposit DAI** into the IrisX vault and receive vault tokens representing your share of the pool.
 2. **Earn yield** as the vault's assets grow — rebasing holders see their balance increase without manual compounding.
 3. **Trade with leverage** through integrated adapters that borrow liquidity from the vault to open spot positions on external DEXes.
 4. **Govern the protocol** by locking IXToken in the voting escrow and participating in proposals.

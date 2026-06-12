@@ -28,7 +28,7 @@ $$
 \end{aligned}
 $$
 
-Default $V_{\min} = 10^6$ USDT wei (1 USDT); $\texttt{maxLeverageBps} = 50\,000$ (5×); $\texttt{maxOpenPositionsVolumeBps} = 5000$.
+Default $V_{\min} = 10^{18}$ DAI wei (1 DAI); $\texttt{maxLeverageBps} = 50\,000$ (5×); $\texttt{maxOpenPositionsVolumeBps} = 5000$.
 
 State transition on success:
 
@@ -36,7 +36,7 @@ $$
 S' = S + m + a, \quad I' = I - (m + a), \quad F_{\text{adapter}}' = F_{\text{adapter}} + m
 $$
 
-Margin $m$ credits adapter **fixed** ledger; underlying USDT transfers to adapter for swap execution.
+Margin $m$ credits adapter **fixed** ledger; underlying DAI transfers to adapter for swap execution.
 
 ```mermaid
 sequenceDiagram
@@ -47,9 +47,9 @@ sequenceDiagram
   Trader->>Adapter: openPosition + swap calldata
   Adapter->>Vault: openPosition(id, trader, m, a)
   Vault->>Vault: validate leverage cap volume cash
-  Vault->>Adapter: transfer USDT m+a
+  Vault->>Adapter: transfer DAI m+a
   Vault->>Vault: S += m+a
-  Adapter->>Adapter: swap USDT to target
+  Adapter->>Adapter: swap DAI to target
 ```
 
 ---
@@ -115,7 +115,7 @@ $$
 K_{\text{liq}} = \min\left( r_{\text{net}} \cdot \dfrac{\texttt{bps}}{10\,000}, \, K_{\max} \right)
 $$
 
-$\texttt{opFee}$ waived if $\texttt{opFee} > \texttt{totalReturnAssets}$. Default $\texttt{bps} = 1000$, $K_{\max} = 500 \times 10^6$.
+$\texttt{opFee}$ waived if $\texttt{opFee} > \texttt{totalReturnAssets}$. Default $\texttt{bps} = 1000$, $K_{\max} = 500 \times 10^{18}$.
 
 ```mermaid
 flowchart TD

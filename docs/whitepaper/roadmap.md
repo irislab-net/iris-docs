@@ -19,7 +19,7 @@ Iris Protocol aims to become foundational DeFi infrastructure — achieving the 
 
 | Milestone | Deliverable |
 |-----------|-------------|
-| Vault deployment | `IXToken` (IrisX over USDT) via UUPS proxy |
+| Vault deployment | `IXToken` (IrisX over DAI) via UUPS proxy |
 | Governance cluster | `VotingEscrow`, `IrisGovernor`, TimelockController |
 | Foundation & Keepers | 15 Chair NFTs + 5 Keeper NFTs at canonical addresses |
 | Adapter v1 | `IrisLeveragedSpotV1Adapter` — leveraged long spot on ETH |

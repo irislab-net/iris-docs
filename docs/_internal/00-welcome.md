@@ -142,7 +142,7 @@ Here is AI context for Iris-Core
 
 ## 1. What this project is
 
-**Iris Core** is the on-chain **vault token** layer for Iris Lab’s leveraged trading stack. The flagship contract **`IXToken`** (branded **IrisX**, e.g. `IUSDT` over USDT) is:
+**Iris Core** is the on-chain **vault token** layer for Iris Lab’s leveraged trading stack. The flagship contract **`IXToken`** (branded **IrisX**, e.g. `USDI` over DAI) is:
 
 - An **ERC20-facing vault share** denominated in **underlying asset units** (not internal rebasing “shares”).
 - A **dual-ledger** system: rebasing yield-bearing balances + **fixed 1:1** balances for DEX/integration safety.
@@ -634,7 +634,7 @@ Expiry rules live in adapter `PositionConfig.maxPositionDurationSeconds`; core d
 
 Per-token **`PositionConfig.chainlinkPriceFeed`** plus immutable **`underlyingChainlinkFeed`**.
 
-**Underlying asset:** Vault underlying is a **stablecoin (USDT or USDC)**. Open and exit use `_getSafePrice` on the target feed; underlying USD leg uses the immutable feed with `MAX_ORACLE_DELAY` on open and exit. Stablecoin oracle risk is accepted for deployment (no separate staleness finding on underlying).
+**Underlying asset:** Vault underlying is **DAI (18 decimals)**. Open and exit use `_getSafePrice` on the target feed; underlying USD leg uses the immutable feed with `MAX_ORACLE_DELAY` on open and exit. Stablecoin oracle risk is accepted for deployment (no separate staleness finding on underlying).
 
 **Open (underlying → target):**
 
@@ -717,7 +717,7 @@ Full reports: [`audit_report_adapter_3.md`](audit_reports/audit_report_adapter_3
 - Governance authorizes this adapter on `IXToken` (`setAdapterStatus`) with matching `Ownable` owner.
 - **Swap `executor` + calldata are caller-supplied by design** — route is computed off-chain; on-chain safety = capped approvals, balance checks, slippage floors (**not** an on-chain router registry). Do not re-flag as a defect.
 - Vault trusts **adapter-reported `grossReturn` and `opFee`** on close/liquidate (same as iris-core report2 H-3).
-- Target-token Chainlink feeds use **`_getSafePrice`** (staleness / round checks). Underlying is **USDT/USDC**; same helper on open/exit — stablecoin oracle risk accepted.
+- Target-token Chainlink feeds use **`_getSafePrice`** (staleness / round checks). Underlying is **DAI**; same helper on open/exit — stablecoin oracle risk accepted.
 
 **Auditor disposition (v3 findings — do not re-open)**
 
@@ -778,7 +778,7 @@ Our Roudmap is
 2. Deploy The MirorStation On ArbitrumOne for leveraging the Speed and gas efficenty to the Leveraged Spot Trading.
 3. Implement More Modules to grow the Economic and allow to gain more profit for the protocol like Collectral Lending. etc.
 
-Our Vision is to get big as USDT on Stable Enviroment, Fully Decentrilized and Same as AVVE for fund managment
+Our Vision is to get big as DAI on Stable Enviroment, Fully Decentrilized and Same as AVVE for fund managment
 
 Here is IrisCore IXToken Code.
 ```sol
